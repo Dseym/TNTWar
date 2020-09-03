@@ -1,0 +1,8 @@
+name: TNTWar
+version: 1.0
+api-version: 1.13
+depend: [WorldEdit]
+main: tntWar.main
+commands:
+  tnt:
+    usage: /tnt
