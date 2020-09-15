@@ -41,7 +41,8 @@ If you need translation, write to Issues.
 # Install for Server
 1. Download the compiled [TNTWar](https://github.com/Dseym/TNTWar/releases/download/TNTWar/tntWar.jar) and upload it to your server.
 2. Install WorldEdit 1.14.4 on the server.
-3. Have fun!
+3. Unpack the WorldEdit.tar archive into plugins.
+4. Have fun!
 
 ## RUS
 
@@ -77,4 +78,5 @@ If you need translation, write to Issues.
 # Установка на сервер
 1. Скачайте скомпилированный [TNTWar](https://github.com/Dseym/TNTWar/releases/download/TNTWar/tntWar.jar) и загрузите на свой сервер.
 2. Установите на свой сервер WorldEdit для 1.14.4.
-3. Веселитесь!
+3. Распакуйте архив WorldEdit.tar в plugins
+4. Веселитесь!
