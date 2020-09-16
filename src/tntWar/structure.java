@@ -47,7 +47,7 @@ public class structure implements Runnable {
 		health = maxHealth;
 		this.name = name;
 		this.team = team;
-		this.cost = cost + ((int)((cost/6) * team.structures.size()));
+		this.cost = cost + ((int)((cost/3) * team.structures.size()));
 		
 		chunks.add(loc.getChunk());
 		location = new Location(loc.getWorld(), (chunks.get(0).getX()*16), loc.getY(), chunks.get(0).getZ()*16);
@@ -70,6 +70,14 @@ public class structure implements Runnable {
 			timer.cancel();
 		isBuild = false;
 		team.structures.remove(this);
+		
+		if(team.isNowBuild == this) {
+			
+			team.isNowBuild = null;
+			gameProcess.nowBuild.get(build.id).cancel();
+			gameProcess.nowBuild.replace(build.id, null);
+			
+		}
 		
 		if(name == "TownHall")
 			team.isLost();
@@ -111,7 +119,7 @@ public class structure implements Runnable {
 		if(name == "TownHall")
 			team.townHall = (townHall)this;
 		
-		team.sendMessage("§9Началось строительство §o" + name);
+		team.sendMessage("§9Строительство §o" + name + " " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
 		
 		team.isNowBuild = this;
 		team.money -= cost;

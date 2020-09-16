@@ -10,6 +10,7 @@ import structuresClass.artillery;
 import structuresClass.bank;
 import structuresClass.engineering;
 import structuresClass.miner;
+import structuresClass.minerIron;
 import structuresClass.strongWall;
 import structuresClass.towerArrow;
 import structuresClass.towerBomb;
@@ -44,6 +45,7 @@ public class commands implements CommandExecutor {
 			
 			Bukkit.getScheduler().runTaskLater(main.plugin, new Runnable() {
 				
+				@SuppressWarnings("deprecation")
 				@Override
 				public void run() {
 					
@@ -51,7 +53,7 @@ public class commands implements CommandExecutor {
 					
 					for(team team: gameProcess.teams.values())
 						if(!team.structures.containsValue("TownHall"))
-							Bukkit.dispatchCommand(team.players.get(0), "tnt build TownHall");
+							Bukkit.dispatchCommand(Bukkit.getPlayer(team.playerNames.get(0)), "tnt build TownHall");
 					
 					gameProcess.process();
 					
@@ -74,6 +76,8 @@ public class commands implements CommandExecutor {
 				return true;
 			
 			}
+			
+			
 				
 			structure structure = structuresList(args[1], player);
 			
@@ -142,47 +146,26 @@ public class commands implements CommandExecutor {
 		
 		structure structure = null;
 		
-		if(name.equalsIgnoreCase("TownHall")) {
-			
+		if(name.equalsIgnoreCase("TownHall"))
 			structure = new townHall(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("TowerBomb")) {
-			
+		else if(name.equalsIgnoreCase("TowerBomb"))
 			structure = new towerBomb(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("Miner")) {
-			
+		else if(name.equalsIgnoreCase("Miner"))
 			structure = new miner(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("Engineering")) {
-			
+		else if(name.equalsIgnoreCase("Engineering"))
 			structure = new engineering(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("TowerArrow")) {
-			
+		else if(name.equalsIgnoreCase("TowerArrow"))
 			structure = new towerArrow(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("Wall")) {
-			
+		else if(name.equalsIgnoreCase("Wall"))
 			structure = new wall(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("StrongWall")) {
-			
+		else if(name.equalsIgnoreCase("StrongWall"))
 			structure = new strongWall(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("Bank")) {
-			
+		else if(name.equalsIgnoreCase("Bank"))
 			structure = new bank(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("Artillery")) {
-			
+		else if(name.equalsIgnoreCase("Artillery"))
 			structure = new artillery(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		} else if(name.equalsIgnoreCase("MinerIron")) {
-			
-			structure = new artillery(player.getLocation(), gameProcess.getTeamPlayer(player));
-			
-		}
+		else if(name.equalsIgnoreCase("MinerIron"))
+			structure = new minerIron(player.getLocation(), gameProcess.getTeamPlayer(player));
 		
 		return structure;
 		

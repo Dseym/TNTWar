@@ -1,5 +1,8 @@
 package structuresClass;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -9,7 +12,7 @@ import tntWar.team;
 
 public class townHall extends structure {
 	
-	public static String description = "Главное здание, при уничтожении - команда проигрывает";
+	public static List<String> description = Arrays.asList("Главное здание, при уничтожении - проигрыш");
 	public static int cost = 0;
 	public static String name = "Ратуша";
 	public static String id = "TownHall";
@@ -29,7 +32,7 @@ public class townHall extends structure {
 		
 		for(structure structure: super.team.structures.keySet())
 			if(structure.name.equalsIgnoreCase("Bank"))
-				money += (int)(money/4);
+				money += (int)(money/5);
 		
 		super.team.money += money;
 		

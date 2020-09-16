@@ -1,18 +1,22 @@
 package structuresClass;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import tntWar.gameProcess;
 import tntWar.main;
 import tntWar.structure;
 import tntWar.team;
 
 public class minerIron extends structure {
 	
-	public static String description = "Добывает железо, которое можно собрать(находясь рядом), со временем уровень добычи повышается";
+	public static List<String> description = Arrays.asList("Добывает железо, выдается ближайшему игроку", "со временем уровень добычи повышается");
 	public static int cost = 850;
 	public static String name = "Шахта железа";
 	public static String id = "MinerIron";
@@ -38,7 +42,7 @@ public class minerIron extends structure {
 			exp++;
 		
 		for(Player p: Bukkit.getOnlinePlayers())
-			if(super.chunks.contains(p.getLocation().getChunk())) {
+			if(gameProcess.getTeamPlayer(p) == super.team && super.chunks.contains(p.getLocation().getChunk())) {
 				
 				p.getInventory().addItem(new ItemStack(Material.IRON_INGOT, iron));
 				iron = 0;

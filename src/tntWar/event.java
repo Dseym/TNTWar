@@ -1,21 +1,27 @@
 package tntWar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import structuresClass.artillery;
@@ -43,56 +49,47 @@ public class event implements Listener {
 			
 			switch (i) {
 				case 0:
-					lore.add(miner.description);
-					lore.add("Стоимость: " + miner.cost);
+					lore.addAll(miner.description);
 					lore.add("ID: " + miner.id);
 					meta.setDisplayName(miner.name);
 				break;
 				case 1:
-					lore.add(towerArrow.description);
-					lore.add("Стоимость: " + towerArrow.cost);
+					lore.addAll(towerArrow.description);
 					lore.add("ID: " + towerArrow.id);
 					meta.setDisplayName(towerArrow.name);
 				break;
 				case 2:
-					lore.add(towerBomb.description);
-					lore.add("Стоимость: " + towerBomb.cost);
+					lore.addAll(towerBomb.description);
 					lore.add("ID: " + towerBomb.id);
 					meta.setDisplayName(towerBomb.name);
 				break;
 				case 3:
-					lore.add(wall.description);
-					lore.add("Стоимость: " + wall.cost);
+					lore.addAll(wall.description);
 					lore.add("ID: " + wall.id);
 					meta.setDisplayName(wall.name);
 				break;
 				case 4:
-					lore.add(strongWall.description);
-					lore.add("Стоимость: " + strongWall.cost);
+					lore.addAll(strongWall.description);
 					lore.add("ID: " + strongWall.id);
 					meta.setDisplayName(strongWall.name);
 				break;
 				case 5:
-					lore.add(bank.description);
-					lore.add("Стоимость: " + bank.cost);
+					lore.addAll(bank.description);
 					lore.add("ID: " + bank.id);
 					meta.setDisplayName(bank.name);
 				break;
 				case 6:
-					lore.add(engineering.description);
-					lore.add("Стоимость: " + engineering.cost);
+					lore.addAll(engineering.description);
 					lore.add("ID: " + engineering.id);
 					meta.setDisplayName(engineering.name);
 				break;
 				case 7:
-					lore.add(artillery.description);
-					lore.add("Стоимость: " + artillery.cost);
+					lore.addAll(artillery.description);
 					lore.add("ID: " + artillery.id);
 					meta.setDisplayName(artillery.name);
 				break;
 				case 8:
-					lore.add(minerIron.description);
-					lore.add("Стоимость: " + minerIron.cost);
+					lore.addAll(minerIron.description);
 					lore.add("ID: " + minerIron.id);
 					meta.setDisplayName(minerIron.name);
 				break;
@@ -112,7 +109,8 @@ public class event implements Listener {
 		
 		if(e.getClickedInventory() == build) {
 			
-			Bukkit.dispatchCommand(e.getWhoClicked(), "tnt build " + e.getCurrentItem().getItemMeta().getLore().get(2).split("ID: ")[1]);
+			List<String> lore = e.getCurrentItem().getItemMeta().getLore();
+			Bukkit.dispatchCommand(e.getWhoClicked(), "tnt build " + lore.get(lore.size()-1).split("ID: ")[1]);
 			e.getWhoClicked().closeInventory();
 			e.setCancelled(true);
 			
@@ -128,7 +126,8 @@ public class event implements Listener {
 		if(gameProcess.getTeamPlayer(player) == null)
 			return;
 		
-		structure structure = gameProcess.getStructureToLocation(e.getBlock().getLocation());	
+		Location locBlock = e.getBlock().getLocation();
+		structure structure = gameProcess.getStructureToLocation(locBlock);	
 		
 		if(structure != null && structure.blocksStructure.contains(e.getBlock())) {
 			
@@ -139,13 +138,56 @@ public class event implements Listener {
 			
 			structure.damage(1);
 			player.sendMessage(main.tagPlugin + "§bРазрушение: " + structure.health + "/" + structure.maxHealth);
+			structure.team.sendMessage("§cРазрушение §o" + structure.name + "§r§c " + locBlock.getBlockX() + "," + locBlock.getBlockY() + "," + locBlock.getBlockZ());
 			
 		}
 		
 	}
 	
+	private void activateChoiceTarget(Block block, Player player, PlayerInteractEvent e) {
+		
+		structure structure = gameProcess.getStructureToLocation(block.getLocation());
+		
+		if(structure == null || !structure.bombs.containsKey(block))
+			return;
+		
+		if(gameProcess.getTeamPlayer(player) != structure.team) {
+			
+			player.sendMessage(main.tagPlugin + "Это не Ваша структура");
+			return;
+			
+		}
+		
+		player.sendMessage(main.tagPlugin + "Укажите траекторию и нажмите туда");
+		selectTarget.put(player, block);
+		e.setCancelled(true);
+		
+		Bukkit.getScheduler().runTaskLater(main.plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				if(!selectTarget.containsKey(player))
+					return;
+				
+				player.sendMessage(main.tagPlugin + "Выбор траектории отменен");
+				selectTarget.remove(player);
+				
+			}
+			
+		}, 30);
+		
+	}
+	
+	private void openShopBuild(Player player, PlayerInteractEvent e) {
+
+		e.getPlayer().openInventory(build);
+		e.setCancelled(true);
+		
+	}
+	
 	@EventHandler
-	void isPlayerClickToBomb(PlayerInteractEvent e) {
+	void isPlayerClick(PlayerInteractEvent e) {
 		
 		Player player = e.getPlayer();
 		
@@ -154,56 +196,21 @@ public class event implements Listener {
 			Block block = e.getClickedBlock();
 			try {
 				
-				if(block != null && block.getType() == Material.BARRIER) {
-					
-					structure structure = gameProcess.getStructureToLocation(block.getLocation());
-					
-					if(structure == null || !structure.bombs.containsKey(block))
-						return;
-					
-					if(gameProcess.getTeamPlayer(player) != structure.team) {
-						
-						player.sendMessage(main.tagPlugin + "Это не Ваша структура");
-						return;
-						
-					}
-					
-					player.sendMessage(main.tagPlugin + "Укажите траекторию и нажмите туда");
-					selectTarget.put(player, block);
-					e.setCancelled(true);
-					
-					Bukkit.getScheduler().runTaskLater(main.plugin, new Runnable() {
-						
-						@Override
-						public void run() {
-							
-							if(!selectTarget.containsKey(player))
-								return;
-							
-							player.sendMessage(main.tagPlugin + "Выбор траектории отменен");
-							selectTarget.remove(player);
-							
-						}
-						
-					}, 5*20);
-					
-				} else if(e.getMaterial() == Material.NAME_TAG) {
-					
-					e.getPlayer().openInventory(build);
-					e.setCancelled(true);
-					
-				}
+				if(block != null && block.getType() == Material.BARRIER)
+					activateChoiceTarget(block, player, e);
+				else if(e.getMaterial() == Material.NAME_TAG)
+					openShopBuild(player, e);
 				
 			} catch (Exception e1) {
 				
-				
+				e1.printStackTrace();
 				
 			}
 			
 		} else {
 			
 			structure structure = gameProcess.getStructureToLocation(selectTarget.get(player).getLocation());
-			structure.bombs.replace(selectTarget.get(player), player.getTargetBlock(null, 50));
+			structure.bombs.replace(selectTarget.get(player), player.getTargetBlock(null, 80));
 			player.sendMessage(main.tagPlugin + "Траектория задана");
 			selectTarget.remove(player);
 			e.setCancelled(true);
@@ -222,10 +229,36 @@ public class event implements Listener {
 			if(structure == null || !structure.blocksStructure.contains(block))
 				continue;
 			
-			structure.damage(1);
+			structure.damage(40);
 			e.setCancelled(true);
 			
+			break;
+			
 		}
+		
+	}
+	
+	@EventHandler
+	void isArrowDamagePlayer(EntityDamageByEntityEvent e) {
+		
+		Entity entity = e.getEntity();
+		if(e.getDamager().getType() != EntityType.ARROW || entity.getType() != EntityType.PLAYER)
+			return;
+		
+		e.setDamage(7);
+		
+		PlayerInventory playerInv = ((Player)entity).getInventory();
+		
+		List<String> armor = new ArrayList<String>();
+		for(ItemStack item: playerInv.getArmorContents())
+			armor.add(item.getType().name());
+			
+		if(armor.containsAll(Arrays.asList("LEATHER_HELMET", "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS")))
+			e.setDamage(e.getDamage() - 1);
+		else if(armor.containsAll(Arrays.asList("IRON_HELMET", "IRON_CHESTPLATE", "IRON_LEGGINGS", "IRON_BOOTS")))
+			e.setDamage(e.getDamage() - 2);
+		else if(armor.containsAll(Arrays.asList("DIAMOND_HELMET", "DIAMOND_CHESTPLATE", "DIAMOND_LEGGINGS", "DIAMOND_BOOTS")))
+			e.setDamage(e.getDamage() - 3);
 		
 	}
 	

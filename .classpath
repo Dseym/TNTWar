@@ -3,6 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/kirill/Desktop/игры/server 1.14.4/craftbukkit-1.14.4-R0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="C:/Users/kirill/Desktop/игры/server 1.14.4/plugins/worldedit-bukkit-7.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/programming/minecraft/1.14.4/worldedit-bukkit-7.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

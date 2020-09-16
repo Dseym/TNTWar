@@ -14,13 +14,13 @@ import structuresClass.townHall;
 public class team {
 
 	public Map<structure, String> structures = new HashMap<structure, String>();
-	List<Player> players = new ArrayList<Player>();
+	List<String> playerNames = new ArrayList<String>();
 	String name;
 	String colorNick;
 	public townHall townHall;
 	scoreboard scoreboard = new scoreboard(this);
 	public int money = 0;
-	double speedBuild = 80;
+	double speedBuild = 100;
 	structure isNowBuild = null;
 	
 	team(String name, String colorNick) {
@@ -34,17 +34,18 @@ public class team {
 		
 		player.sendMessage(main.tagPlugin + "§bВы играете за команду " + colorNick + "§o" + name);
 		player.setCustomName(colorNick + player.getName());
-		players.add(player);
+		playerNames.add(player.getName());
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	void isLost() {
 		
 		sendMessage("§4Ваша Ратуша уничтожена, §lВы проиграли");
 		for(structure structure: structures.keySet())
 			structure.destroy(false);
-		for(Player p: players)
-			p.setGameMode(GameMode.SPECTATOR);
+		for(String p: playerNames)
+			Bukkit.getPlayer(p).setGameMode(GameMode.SPECTATOR);
 		gameProcess.teams.remove(name);
 		
 		if(gameProcess.teams.size() == 1) {
@@ -58,13 +59,17 @@ public class team {
 
 	}
 	
+	private String lastMessage = "";
+	@SuppressWarnings("deprecation")
 	void sendMessage(String mess) {
 		
-		for(Player p: players) {
-			
-			p.sendMessage(main.tagPlugin + "§4§lКоманда>> §r" + mess);
-			
-		}
+		if(lastMessage.equalsIgnoreCase(mess))
+			return;
+		
+		for(String p: playerNames)
+			Bukkit.getPlayer(p).sendMessage(main.tagPlugin + "§4§lКоманда>> §r" + mess);
+		
+		lastMessage = mess;
 		
 	}
 	

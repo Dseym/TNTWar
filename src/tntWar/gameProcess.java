@@ -54,7 +54,7 @@ public class gameProcess {
 		
 		for(Player player: players) {
 			
-			if(teams.get("blue").players.size() == players.size() / 2)
+			if(teams.get("blue").playerNames.size() == players.size() / 2)
 				teams.get("red").addPlayer(player);
 			else
 				teams.get("blue").addPlayer(player);
@@ -67,11 +67,11 @@ public class gameProcess {
 		
 	}
 	
-	static team getTeamPlayer(Player p) {
+	public static team getTeamPlayer(Player p) {
 		
 		for(team team: teams.values()) {
 			
-			if(team.players.contains(p))
+			if(team.playerNames.contains(p.getName()))
 				return team;
 			
 		}
@@ -127,7 +127,7 @@ public class gameProcess {
 						
 						Location locPlayer = new Location(p.getLocation().getWorld(), p.getLocation().getX(), 0, p.getLocation().getZ());
 						Location locArrow = new Location(arrow.getLocation().getWorld(), arrow.getLocation().getX(), 0, arrow.getLocation().getZ());
-						if(getTeamPlayer(p) != team && locArrow.distance(locPlayer) < 41) {
+						if(getTeamPlayer(p) != team && locArrow.distance(locPlayer) < 51) {
 							
 							Entity arrowEntity = arrow.getLocation().getWorld().spawnEntity(arrow.getLocation(), EntityType.ARROW);
 							arrowEntity.setVelocity(p.getLocation().toVector().subtract(arrow.getLocation().toVector()));

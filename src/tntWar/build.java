@@ -117,7 +117,7 @@ public class build implements Runnable {
 				structure.chunks.add(chunk);
 			
 			List<String> ignoreMaterials = new ArrayList<String>();
-			ignoreMaterials.addAll(Arrays.asList("AIR", "DIRT", "GRASS", "GRASS_BLOCK", "TORCH", "REDSTONE_TORCH", "REDSTONE", "LADDER", "RAIL", "OAK_DOOR", "SPRUCE_DOOR", "OAK_BUTTON", "STONE_BUTTON", "GRAVEL", "SAND", "OAK_SIGN", "IRON_DOOR", "VINE", "STONE_PRESSURE_PLATE", "FLOWER_POT", "TRIPWIRE_HOOK", "OAK_PRESSURE_PLATE", "WHITE_BED", "SMOOTH_QUARTZ_STAIRS", "LANTERN", "IRON_TRAPDOOR", "OAK_TRAPDOOR", "SPRUCE_TRAPDOOR", "DAYLIGHT_DETECTOR", "OAK_LEAVES", "CAMPFIRE", "GRASS_PATH", "SNOW", "BREWING_STAND"));
+			ignoreMaterials.addAll(Arrays.asList("AIR", "DIRT", "GRASS", "GRASS_BLOCK", "TORCH", "WALL_TORCH", "REDSTONE_TORCH", "REDSTONE", "LADDER", "RAIL", "OAK_DOOR", "SPRUCE_DOOR", "OAK_BUTTON", "STONE_BUTTON", "GRAVEL", "SAND", "OAK_SIGN", "IRON_DOOR", "VINE", "STONE_PRESSURE_PLATE", "FLOWER_POT", "TRIPWIRE_HOOK", "OAK_PRESSURE_PLATE", "WHITE_BED", "SMOOTH_QUARTZ_STAIRS", "LANTERN", "IRON_TRAPDOOR", "OAK_TRAPDOOR", "SPRUCE_TRAPDOOR", "DAYLIGHT_DETECTOR", "OAK_LEAVES", "CAMPFIRE", "GRASS_PATH", "SNOW", "BREWING_STAND"));
 			
 			if(!ignoreMaterials.contains(material.toString()))
 				gameProcess.getStructureToLocation(location).blocksStructure.add(BukkitAdapter.adapt(world, locationBlock).getBlock());

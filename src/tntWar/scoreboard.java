@@ -32,9 +32,12 @@ public class scoreboard {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	void reload() {
 		
-		for(Player p: team.players) {
+		for(String pN: team.playerNames) {
+			
+			Player p = Bukkit.getPlayer(pN);
 			
 			if(gameProcess.bossBars.containsKey(p))
 				continue;
@@ -53,15 +56,14 @@ public class scoreboard {
 			
 		}
 		
-		obj.getScore("Команда: " + team.colorNick + team.name).setScore(8);
-		obj.getScore("Игроков: " + team.players.size()).setScore(7);
-		obj.getScore("§0").setScore(6);
-		obj.getScore("Ратуша: " + team.townHall.health + "/" + team.townHall.maxHealth).setScore(5);
-		obj.getScore("Монет: " + team.money).setScore(4);
-		obj.getScore("Молотки: " + (int)team.speedBuild).setScore(3);
-		obj.getScore("Строится: " + (team.isNowBuild == null ? "ничего" : team.isNowBuild.name + "(" + (int)(((double)(team.isNowBuild.build.process) / (double)(team.isNowBuild.build.blocks.size()-1)) * 100) + "%)")).setScore(2);
-		obj.getScore("§1").setScore(1);
-		obj.getScore("Создано by Dseymo").setScore(0);
+		obj.getScore("Команда: " + team.colorNick + team.name).setScore(7);
+		obj.getScore("Игроков: " + team.playerNames.size()).setScore(6);
+		obj.getScore("§0").setScore(5);
+		obj.getScore("Ратуша: " + team.townHall.health + "/" + team.townHall.maxHealth).setScore(4);
+		obj.getScore("Монет: " + team.money).setScore(3);
+		obj.getScore("Молотки: " + (int)team.speedBuild).setScore(2);
+		obj.getScore("Строится: " + (team.isNowBuild == null ? "ничего" : team.isNowBuild.name + "(" + (int)(((double)(team.isNowBuild.build.process) / (double)(team.isNowBuild.build.blocks.size()-1)) * 100) + "%)")).setScore(1);
+		obj.getScore("Строений: " + team.structures.size()).setScore(0);
 		
 	}
 	
