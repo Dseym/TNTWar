@@ -42,7 +42,10 @@ public class team {
 	void isLost() {
 		
 		sendMessage("§4Ваша Ратуша уничтожена, §lВы проиграли");
-		for(structure structure: structures.keySet())
+		
+		Map<structure, String> list = new HashMap<structure, String>();
+		list.putAll(structures);
+		for(structure structure: list.keySet())
 			structure.destroy(false);
 		for(String p: playerNames)
 			Bukkit.getPlayer(p).setGameMode(GameMode.SPECTATOR);
